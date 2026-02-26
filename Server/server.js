@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 // Connect to MongoDB (non-blocking)
 connectDB().catch(err => console.error("Failed to connect to MongoDB:", err));
-// routes moved to controller for cleanliness
+
 const paymentsRouter = require("./controllers/paymentController");
 app.use("/payments", paymentsRouter);
 // Health check endpoint
