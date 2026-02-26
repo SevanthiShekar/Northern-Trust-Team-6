@@ -13,9 +13,9 @@ app.use(cors());
 app.use(express.json());
 
 // Test route
-app.get("/", (req, res) => {
-    res.send("Payment Gateway API Running");
-});
+// app.get("/", (req, res) => {
+//     res.send("Payment Gateway API Running");
+// });
 
 const PORT = 5000;
 
