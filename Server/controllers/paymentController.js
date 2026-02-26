@@ -1,12 +1,36 @@
 const express = require("express");
 const router = express.Router();
 const Payment = require("../models/payments");
+// simple http client for delivering webhook callbacks
+const axios = require("axios");
 
 // ------------------------------------------------------------------
 // payment processing simulation (same logic as before)
 // ------------------------------------------------------------------
 const fraudLimit = 10000;
 
+// send a webhook POST if WEBHOOK_URL is configured; payload is any serializable object
+async function deliverWebhook(payload) {
+    // always log what we are about to send (or would send)
+    console.log("(webhook) payload ->", payload);
+    const url = process.env.WEBHOOK_URL;
+    if (!url) {
+        console.log("(webhook) no URL configured, skipping HTTP delivery");
+        return;
+    }
+    try {
+        await axios.post(url, payload, { timeout: 5000 });
+        console.log("(webhook) delivered to", url);
+    } catch (err) {
+        console.error("(webhook) delivery failed:", err.message);
+    }
+}
+
+// ------------------------------------------------------------------
+// payment processing simulation (same logic as before)
+// each time the status changes we both log and attempt to POST a
+// callback to the configured WEBHOOK_URL (if any).
+// ------------------------------------------------------------------
 async function simulateProcessing(paymentId) {
     try {
         await Payment.findByIdAndUpdate(paymentId, { status: "PROCESSING" });
@@ -31,7 +55,10 @@ async function simulateProcessing(paymentId) {
             }
             await Payment.findByIdAndUpdate(paymentId, update);
             console.log(`Payment ${paymentId} completed with status ${update.status}`);
-            console.log(`Webhook: payment ${paymentId} status changed to ${update.status}`);
+            // log the status change event itself
+            console.log(`(webhook) status changed to ${update.status} for ${paymentId}`);
+            const webhookPayload = { success: true, paymentId, status: update.status };
+            await deliverWebhook(webhookPayload);
         }, 1000 + Math.random() * 2000);
     } catch (err) {
         console.error("Error in simulateProcessing:", err.message);
@@ -81,7 +108,9 @@ router.post("/:id/refund", async (req, res) => {
         if (payment.status !== "SUCCESS") return res.status(400).json({ success: false, message: "Only SUCCESS payments can be refunded" });
         payment.status = "REFUNDED";
         await payment.save();
-        console.log(`Webhook: payment ${payment._id} status changed to REFUNDED`);
+        console.log(`(webhook) status changed to REFUNDED for ${payment._id}`);
+        const webhookPayload = { success: true, paymentId: payment._id, status: "REFUNDED" };
+        await deliverWebhook(webhookPayload);
         res.json({ success: true, message: "Refunded" });
     } catch (err) {
         console.error("Error refunding payment:", err.message);

@@ -27,7 +27,8 @@ app.get("/health", (req, res) => {
     message: "Server is running",
     port: PORT,
     mongoUri: mongoUri.substring(0, 50) + "...", // truncate for security
-    connectedDatabase: dbName
+    connectedDatabase: dbName,
+    webhookUrl: process.env.WEBHOOK_URL || null
   });
 });
 
