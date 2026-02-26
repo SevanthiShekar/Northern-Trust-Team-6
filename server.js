@@ -1,7 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const connectDB = require("./config/db");
+const connectDB = require("./config/db")
+const paymentController = require("./controllers/paymentController");
 
 const app = express();
 
@@ -11,6 +12,7 @@ connectDB();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.post("/payments", paymentController.createPayment);
 
 // Test route
 app.get("/", (req, res) => {
@@ -18,6 +20,9 @@ app.get("/", (req, res) => {
 });
 
 const PORT = 5000;
+app.post("/test-route", (req, res) => {
+  res.send("TEST ROUTE WORKING");
+});
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

@@ -1,14 +1,19 @@
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
-    try {
-        const conn = await mongoose.connect(process.env.MONGO_URI);
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
 
-        console.log(`MongoDB Connected: Database Connection Successful`);
-    } catch (error) {
-        console.error("Database connection failed:", error.message);
-        process.exit(1); // Exit if DB fails
-    }
+    console.log("MongoDB Connected");
+    console.log("👉 Database name:", mongoose.connection.name);
+    console.log(
+      "👉 Collections:",
+      Object.keys(mongoose.connection.collections)
+    );
+  } catch (error) {
+    console.error("MongoDB connection error:", error.message);
+    process.exit(1);
+  }
 };
 
 module.exports = connectDB;
