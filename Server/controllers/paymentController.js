@@ -171,7 +171,7 @@ router.get("/summary", async (req, res) => {
 });
 
 // get by id
-vrouter.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;
         console.log(`🔍 Looking for payment with ID: ${id}`);
