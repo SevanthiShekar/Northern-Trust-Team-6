@@ -266,9 +266,10 @@ No automated tests are provided, but you can exercise all endpoints with Postman
 
 
 ## 👥 Team
-Sevanthi Shekar 
-Siddhi Pardeshi
-Zeeshan Khan 
-THUDUMALADINNE BHASHITHA
-Bhumi Bhat
+
+- Sevanthi Shekar
+- Siddhi Pardeshi
+- Zeeshan Khan
+- Thudumaladinne Bhashitha
+- Bhumi Bhat
 
