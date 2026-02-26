@@ -2,41 +2,52 @@ const express = require("express");
 const router = express.Router();
 const Payment = require("../models/payments");
 
-// ------------------------------------------------------------------
-// payment processing simulation (same logic as before)
-// ------------------------------------------------------------------
-const fraudLimit = 10000;
+const startPaymentProcessing = (paymentId) => {
+    // console.log("calling processing")
+    const delayToStart = 2000 
 
-async function simulateProcessing(paymentId) {
-    try {
-        await Payment.findByIdAndUpdate(paymentId, { status: "PROCESSING" });
-        console.log(`Payment ${paymentId} moved to PROCESSING`);
+    setTimeout(async () => {
+
+        const payment = await Payment.findById(paymentId)
+        if (!payment) return
+
+        payment.status = "PROCESSING"
+        await payment.save()
+
+        const processingDelay = Math.floor(Math.random() * 3000) + 2000
+
         setTimeout(async () => {
-            const payment = await Payment.findById(paymentId);
-            if (!payment) return;
-            let update = {};
-            if (payment.amount <= 0) {
-                update.status = "FAILED";
-                update.failureReason = "Invalid amount";
-            } else if (payment.amount > fraudLimit) {
-                update.status = "FAILED";
-                update.failureReason = "Fraud detected";
-            } else {
-                if (Math.random() < 0.8) {
-                    update.status = "SUCCESS";
-                } else {
-                    update.status = "FAILED";
-                    update.failureReason = "Random failure";
-                }
-            }
-            await Payment.findByIdAndUpdate(paymentId, update);
-            console.log(`Payment ${paymentId} completed with status ${update.status}`);
-            console.log(`Webhook: payment ${paymentId} status changed to ${update.status}`);
-        }, 1000 + Math.random() * 2000);
-    } catch (err) {
-        console.error("Error in simulateProcessing:", err.message);
+
+        let finalStatus, isFraudulent, failureReason
+        // console.log("calling setting")
+        if (payment.amount <= 0) {
+            finalStatus = "FAILED"
+            failureReason = "Invalid Amount"
+
+        } 
+        else if (payment.amount > 10000) {
+            finalStatus = "FAILED"
+            isFraudulent = true
+            failureReason = "Fraud detected"
+        } 
+        else {
+            finalStatus = Math.random() > 0.5 ? "SUCCESS" : "FAILED"
+        }
+
+        await Payment.findByIdAndUpdate(paymentId, {
+            status: finalStatus,
+            isFraudulent: isFraudulent,
+            failureReason: failureReason
+        })
+
+        console.log(finalStatus)
+        // console.log("completed setting")
+        // console.log("completed processing")
+
+        }, processingDelay)
+
+    }, delayToStart)
     }
-}
 
 // create payment
 router.post("/", async (req, res) => {
@@ -47,7 +58,7 @@ router.post("/", async (req, res) => {
     try {
         const payment = new Payment({ amount, currency, customerId });
         await payment.save();
-        simulateProcessing(payment._id);
+        startPaymentProcessing(payment._id);
         res.status(201).json({ success: true, paymentId: payment._id });
     } catch (err) {
         console.error("Error creating payment:", err.message);
