@@ -1,19 +1,22 @@
+
+
+module.exports = connectDB;
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
+    try {
+        const conn = await mongoose.connect(process.env.MONGO_URI, {
+            dbName: "Payment_Gateway_Stimulation",
+            connectTimeoutMS: 10000,
+            socketTimeoutMS: 45000,
+        });
 
-    console.log("MongoDB Connected");
-    console.log("👉 Database name:", mongoose.connection.name);
-    console.log(
-      "👉 Collections:",
-      Object.keys(mongoose.connection.collections)
-    );
-  } catch (error) {
-    console.error("MongoDB connection error:", error.message);
-    process.exit(1);
-  }
+        console.log(`MongoDB Connected: Database Connection Successful`);
+        console.log(`Connected to database: ${conn.connection.db.databaseName}`);
+    } catch (error) {
+        console.error("Database connection failed:", error.message);
+        process.exit(1); // Exit if DB fails
+    }
 };
 
 module.exports = connectDB;
