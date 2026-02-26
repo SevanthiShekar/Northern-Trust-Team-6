@@ -6,7 +6,6 @@ const Payment = require("./models/payments");
 
 const app = express();
 
-// Middleware
 app.use(cors({
   origin: [
     "http://127.0.0.1:5500",
@@ -17,13 +16,11 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Connect to MongoDB (non-blocking)
 connectDB().catch(err => console.error("Failed to connect to MongoDB:", err));
 
 const paymentsRouter = require("./controllers/paymentController");
 app.use("/payments", paymentsRouter);
 
-// Health check endpoint
 app.get("/health", (req, res) => {
   const mongoUri = process.env.MONGO_URI || "Not set";
   const dbName = require("mongoose").connection.db?.databaseName || "Unknown";
@@ -32,7 +29,7 @@ app.get("/health", (req, res) => {
     status: "OK", 
     message: "Server is running",
     port: PORT,
-    mongoUri: mongoUri.substring(0, 50) + "...", // truncate for security
+    mongoUri: mongoUri.substring(0, 50) + "...",
     connectedDatabase: dbName
   });
 });
