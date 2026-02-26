@@ -207,6 +207,9 @@ js
 
 | Name | GitHub |
 |------|--------|
-| Sevanthi Shekar | [@SevanthiShekar](https://github.com/SevanthiShekar) |
-| Siddhi Pardeshi | [@siddhipardeshi-glitch](https://github.com/siddhipardeshi-glitch) |
-| Zeeshan Khan | [@ZeeshanKhan](https://github.com/ZeeshanKhan) |
+| Sevanthi Shekar 
+| Siddhi Pardeshi
+| Zeeshan Khan 
+|THUDUMALADINNE BHASHITHA
+|Bhumi Bhat
+
