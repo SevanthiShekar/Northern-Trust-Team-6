@@ -4,7 +4,6 @@ const router = express.Router();
 const Payment = require("../models/payments");
 
 const startPaymentProcessing = (paymentId) => {
-    // console.log("calling processing")
     const delayToStart = 2000
 
     setTimeout(async () => {
@@ -20,7 +19,6 @@ const startPaymentProcessing = (paymentId) => {
         setTimeout(async () => {
 
             let finalStatus, isFraudulent, failureReason
-            // console.log("calling setting")
             if (payment.amount <= 0) {
                 finalStatus = "FAILED"
                 failureReason = "Invalid Amount"
@@ -42,15 +40,12 @@ const startPaymentProcessing = (paymentId) => {
             })
 
             console.log(finalStatus)
-            // console.log("completed setting")
-            // console.log("completed processing")
 
         }, processingDelay)
 
     }, delayToStart)
 }
 
-// create payment
 router.post("/", async (req, res) => {
     const { amount, currency, customerId } = req.body;
     if (amount == null || !currency || !customerId) {
@@ -67,7 +62,6 @@ router.post("/", async (req, res) => {
     }
 });
 
-// retry
 router.post("/:id/retry", async (req, res) => {
     try {
         const payment = await Payment.findById(req.params.id);
@@ -85,7 +79,6 @@ router.post("/:id/retry", async (req, res) => {
     }
 });
 
-// refund
 router.post("/:id/refund", async (req, res) => {
     try {
         const payment = await Payment.findById(req.params.id);
@@ -101,7 +94,6 @@ router.post("/:id/refund", async (req, res) => {
     }
 });
 
-// fetch all
 router.get("/", async (req, res) => {
     console.log("GET /payments called");
     try {
