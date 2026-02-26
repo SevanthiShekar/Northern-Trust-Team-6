@@ -266,15 +266,9 @@ No automated tests are provided, but you can exercise all endpoints with Postman
 
 
 ## 👥 Team
+Sevanthi Shekar 
+Siddhi Pardeshi
+Zeeshan Khan 
+THUDUMALADINNE BHASHITHA
+Bhumi Bhat
 
-| Name | GitHub |
-|------|--------|
-| Sevanthi Shekar | [@SevanthiShekar](https://github.com/SevanthiShekar) |
-| Siddhi Pardeshi | [@siddhipardeshi-glitch](https://github.com/siddhipardeshi-glitch) |
-| Zeeshan Khan | [@ZeeshanKhan](https://github.com/ZeeshanKhan) |
-| Bhumi Bhat |
-|THUDUMALADINNE BHASHITHA |
-
----
-
-> Built for the Northern Trust Internship Round 2 Hackathon 🏦 ⭐
