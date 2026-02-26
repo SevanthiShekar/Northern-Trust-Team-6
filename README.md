@@ -47,16 +47,25 @@ The service tracks each payment's lifecycle, supports retries/refunds, and can n
 
 ```
 Northern-Trust-Team-6/
+
 ├── Server/                # API server code
+
 │   ├── config/
+
 │   │   └── db.js          # MongoDB connection
+
 │   ├── controllers/
+
 │   │   └── paymentController.js   # All route handlers + processing logic
+
 │   ├── models/
 │   │   └── payments.js    # Mongoose schema
+
 │   ├── .env               # Environment variables (not committed)
+
 │   ├── package.json
 │   └── server.js          # Express app entry point
+
 ├── client.html            # Browser frontend
 └── README.md
 ```
@@ -67,7 +76,9 @@ Northern-Trust-Team-6/
 
 ```bash
 git clone https://github.com/SevanthiShekar/Northern-Trust-Team-6.git
+
 cd Northern-Trust-Team-6/Server
+
 npm install
 ```
 
@@ -77,7 +88,9 @@ Create a `.env` file inside the `Server/` folder:
 
 ```
 MONGO_URI=mongodb+srv://.../Payment_Gateway_Stimulation
+
 PORT=3000
+
 WEBHOOK_URL=https://webhook.site/your-id   # optional
 ```
 
@@ -91,13 +104,7 @@ Run in development mode:
 npm run dev
 ```
 
-Production mode:
 
-```bash
-npm start
-```
-
-API listens on `http://localhost:3000` by default.
 
 ### 🖥️ Frontend
 
@@ -132,7 +139,9 @@ Every payment follows a strict lifecycle. No arbitrary state jumps are allowed.
                     ▼                                  │
   [CREATED] ──► [PROCESSING] ──► [SUCCESS] ──► [REFUNDED]
                     │
+
                     └──► [FAILED] ──► [CREATED]  (via retry)
+
                                           │
                                      [PROCESSING] ──► ...
 ```
