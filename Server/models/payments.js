@@ -43,7 +43,8 @@ const paymentSchema = new mongoose.Schema(
     }
   },
   {
-    timestamps: true // adds createdAt & updatedAt automatically
+    timestamps: true, // adds createdAt & updatedAt automatically
+    collection: "payments" // explicitly specify collection name
   }
 );
 
