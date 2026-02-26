@@ -4,7 +4,7 @@ const Payment = require("../models/payments");
 
 const startPaymentProcessing = (paymentId) => {
     // console.log("calling processing")
-    const delayToStart = 2000 
+    const delayToStart = 2000
 
     setTimeout(async () => {
 
@@ -18,36 +18,36 @@ const startPaymentProcessing = (paymentId) => {
 
         setTimeout(async () => {
 
-        let finalStatus, isFraudulent, failureReason
-        // console.log("calling setting")
-        if (payment.amount <= 0) {
-            finalStatus = "FAILED"
-            failureReason = "Invalid Amount"
+            let finalStatus, isFraudulent, failureReason
+            // console.log("calling setting")
+            if (payment.amount <= 0) {
+                finalStatus = "FAILED"
+                failureReason = "Invalid Amount"
 
-        } 
-        else if (payment.amount > 10000) {
-            finalStatus = "FAILED"
-            isFraudulent = true
-            failureReason = "Fraud detected"
-        } 
-        else {
-            finalStatus = Math.random() > 0.5 ? "SUCCESS" : "FAILED"
-        }
+            }
+            else if (payment.amount > 10000) {
+                finalStatus = "FAILED"
+                isFraudulent = true
+                failureReason = "Fraud detected"
+            }
+            else {
+                finalStatus = Math.random() > 0.5 ? "SUCCESS" : "FAILED"
+            }
 
-        await Payment.findByIdAndUpdate(paymentId, {
-            status: finalStatus,
-            isFraudulent: isFraudulent,
-            failureReason: failureReason
-        })
+            await Payment.findByIdAndUpdate(paymentId, {
+                status: finalStatus,
+                isFraudulent: isFraudulent,
+                failureReason: failureReason
+            })
 
-        console.log(finalStatus)
-        // console.log("completed setting")
-        // console.log("completed processing")
+            console.log(finalStatus)
+            // console.log("completed setting")
+            // console.log("completed processing")
 
         }, processingDelay)
 
     }, delayToStart)
-    }
+}
 
 // create payment
 router.post("/", async (req, res) => {
@@ -193,16 +193,8 @@ router.get("/:id", async (req, res) => {
         }
 
         res.status(200).json({
-            _id: { $oid: payment._id.toString() },
-            amount: payment.amount,
-            currency: payment.currency,
-            customerId: payment.customerId,
-            status: payment.status,
-            failureReason: payment.failureReason || null,
-            retryCount: payment.retryCount,
-            isFraudulent: payment.isFraudulent,
-            createdAt: { $date: payment.createdAt.toISOString() },
-            updatedAt: { $date: payment.updatedAt.toISOString() }
+            success: true,
+            data: payment
         });
 
     } catch (error) {
