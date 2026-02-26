@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Gateway Simulator</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI",sans-serif;
+}
+
+body{
+  background:#f3f5f4;
+  color:#1f2937;
+}
+
+/* ================= NAVBAR ================= */
+.navbar{
+  background:white;
+  padding:20px 70px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #e5e7eb;
+}
+
+.nav-left{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.logo-box{
+  width:48px;
+  height:48px;
+  background:#2e8b57;
+  border-radius:14px;
+  color:white;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.logo-title{
+  font-size:28px;
+  font-weight:700;
+}
+
+.logo-sub{
+  font-size:12px;
+  letter-spacing:2px;
+  color:#6b7280;
+}
+
+.nav-menu button{
+  border:none;
+  background:none;
+  margin-left:20px;
+  padding:10px 22px;
+  border-radius:30px;
+  cursor:pointer;
+  font-size:15px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+
+.nav-menu .active{
+  background:#e6f4ec;
+  color:#2e8b57;
+  font-weight:600;
+}
+
+/* ================= SECTION ================= */
+.section{
+  display:none;
+  padding:60px 120px;
+}
+
+.section.active{
+  display:block;
+}
+
+.page-title{
+  font-size:36px;
+  font-weight:700;
+}
+
+.page-sub{
+  margin-top:10px;
+  color:#6b7280;
+  font-size:16px;
+}
+
+/* ================= DASHBOARD ================= */
+.cards{
+  margin-top:30px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
+}
+
+.card{
+  background:white;
+  padding:25px;
+  border-radius:18px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.04);
+  position:relative;
+}
+
+.card h3{
+  font-size:15px;
+  color:#6b7280;
+}
+
+.card .value{
+  font-size:38px;
+  font-weight:700;
+  margin-top:15px;
+}
+
+.card .icon{
+  position:absolute;
+  right:25px;
+  top:25px;
+  font-size:22px;
+}
+
+.green{color:#2e8b57;}
+.red{color:#dc2626;}
+.orange{color:#f59e0b;}
+
+.transactions-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:50px;
+}
+
+.records{
+  color:#6b7280;
+}
+
+.empty-box{
+  margin-top:20px;
+  background:white;
+  border-radius:16px;
+  border:1px dashed #d1d5db;
+  padding:80px 20px;
+  text-align:center;
+  color:#6b7280;
+}
+
+/* ================= FORM ================= */
+.form-box{
+  margin-top:40px;
+  background:white;
+  padding:40px;
+  border-radius:18px;
+  max-width:600px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.04);
+}
+
+.form-group{
+  margin-bottom:20px;
+}
+
+input,select{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #d1d5db;
+  font-size:14px;
+}
+
+.primary{
+  background:#2e8b57;
+  color:white;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  width:100%;
+  cursor:pointer;
+  font-weight:600;
+}
+
+/* ================= CHECK STATUS ================= */
+.tab-container{
+  margin-top:40px;
+  background:#e9eeec;
+  padding:6px;
+  border-radius:30px;
+  width:520px;
+  display:flex;
+}
+
+.tab{
+  flex:1;
+  border:none;
+  padding:14px;
+  border-radius:25px;
+  background:transparent;
+  cursor:pointer;
+  font-size:15px;
+}
+
+.tab.active{
+  background:white;
+  box-shadow:0 2px 6px rgba(0,0,0,0.05);
+  font-weight:600;
+}
+
+.search-card{
+  margin-top:35px;
+  background:white;
+  padding:35px;
+  border-radius:18px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.04);
+  max-width:950px;
+}
+
+.search-row{
+  display:flex;
+  gap:15px;
+  align-items:center;
+}
+
+.search-row input{
+  flex:1;
+}
+
+.search-btn{
+  background:#2e8b57;
+  color:white;
+  border:none;
+  padding:14px 30px;
+  border-radius:12px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.divider{
+  height:1px;
+  background:#e5e7eb;
+  margin:30px 0;
+}
+
+.toggle-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:#6b7280;
+}
+
+.switch{
+  position:relative;
+  width:46px;
+  height:24px;
+}
+
+.switch input{display:none;}
+
+.slider{
+  position:absolute;
+  top:0;left:0;right:0;bottom:0;
+  background:#d1d5db;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.slider:before{
+  content:"";
+  position:absolute;
+  height:18px;width:18px;
+  left:3px;bottom:3px;
+  background:white;
+  border-radius:50%;
+  transition:0.3s;
+}
+
+input:checked + .slider{
+  background:#2e8b57;
+}
+
+input:checked + .slider:before{
+  transform:translateX(22px);
+}
+
+.result-box{
+  margin-top:20px;
+  padding:15px;
+  border-radius:12px;
+  background:#f9fafb;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+  <div class="nav-left">
+    <div class="logo-box">PG</div>
+    <div>
+      <div class="logo-title">Payment Gateway</div>
+      <div class="logo-sub">SIMULATOR</div>
+    </div>
+  </div>
+
+  <div class="nav-menu">
+    <button onclick="showSection('dashboard')" id="nav-dashboard" class="active">Dashboard</button>
+    <button onclick="showSection('create')" id="nav-create">Create Payment</button>
+    <button onclick="showSection('status')" id="nav-status">Check Status</button>
+  </div>
+</div>
+
+<!-- ================= DASHBOARD ================= -->
+<div id="dashboard" class="section active">
+  <div class="page-title">Dashboard</div>
+  <div class="page-sub">Overview of all payment transactions across all customers.</div>
+
+  <div class="cards">
+    <div class="card">
+      <h3>Total Payments</h3>
+      <div class="value" id="total">0</div>
+      <div class="icon green">$</div>
+    </div>
+
+    <div class="card">
+      <h3>Successful</h3>
+      <div class="value" id="success">0</div>
+      <div class="icon green">✔</div>
+    </div>
+
+    <div class="card">
+      <h3>Failed</h3>
+      <div class="value" id="fail">0</div>
+      <div class="icon red">✖</div>
+    </div>
+
+    <div class="card">
+      <h3>Pending</h3>
+      <div class="value" id="pend">0</div>
+      <div class="icon orange">⏳</div>
+    </div>
+  </div>
+
+  <div class="transactions-header">
+    <h2>All Transactions</h2>
+    <div class="records" id="records">0 records</div>
+  </div>
+
+  <div class="empty-box" id="emptyBox">
+    <h3>No payments yet</h3>
+    <p>Create your first payment to get started.</p>
+  </div>
+</div>
+
+<!-- ================= CREATE PAYMENT ================= -->
+<div id="create" class="section">
+  <div class="page-title">Create Payment</div>
+  <div class="page-sub">Simulate a new payment transaction.</div>
+
+  <div class="form-box">
+    <div class="form-group">
+      <input type="number" id="amount" placeholder="Amount">
+    </div>
+    <div class="form-group">
+      <select id="currency">
+        <option>USD</option>
+        <option>EUR</option>
+        <option>INR</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <input type="text" id="customer" placeholder="Customer ID">
+    </div>
+    <button class="primary" onclick="createPayment()">Submit Payment</button>
+  </div>
+</div>
+
+<!-- ================= CHECK STATUS ================= -->
+<div id="status" class="section">
+  <div class="page-title">Check Status</div>
+  <div class="page-sub">Look up payment details by Payment ID or Customer ID.</div>
+
+  <div class="tab-container">
+    <button class="tab active" onclick="switchTab('payment',event)">By Payment ID</button>
+    <button class="tab" onclick="switchTab('customer',event)">By Customer ID</button>
+  </div>
+
+  <div class="search-card">
+    <label id="searchLabel"><b>Payment ID</b></label>
+
+    <div class="search-row">
+      <input type="text" id="searchInput" placeholder="Enter Payment ID">
+      <button class="search-btn" onclick="searchPayment()">Search</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="toggle-row">
+      <label class="switch">
+        <input type="checkbox" onchange="toggleAutoRefresh(this)">
+        <span class="slider"></span>
+      </label>
+      Auto-refresh every 3s
+    </div>
+
+    <div id="result" class="result-box" style="display:none;"></div>
+  </div>
+</div>
+
+<script>
+let payments=[];
+let refreshInterval=null;
+let currentSearchType="payment";
+
+function showSection(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".nav-menu button").forEach(b=>b.classList.remove("active"));
+  document.getElementById("nav-"+id).classList.add("active");
+}
+
+function createPayment(){
+  const amount=document.getElementById("amount").value;
+  const currency=document.getElementById("currency").value;
+  const customer=document.getElementById("customer").value;
+  if(!amount||!customer) return alert("Fill all fields");
+
+  const id="PAY"+Math.floor(Math.random()*100000);
+  const statuses=["Successful","Failed","Pending"];
+  const status=statuses[Math.floor(Math.random()*3)];
+
+  payments.push({id,amount,currency,customer,status});
+  updateDashboard();
+  alert("Payment Created: "+id);
+}
+
+function updateDashboard(){
+  total.innerText=payments.length;
+  success.innerText=payments.filter(p=>p.status==="Successful").length;
+  fail.innerText=payments.filter(p=>p.status==="Failed").length;
+  pend.innerText=payments.filter(p=>p.status==="Pending").length;
+  records.innerText=payments.length+" records";
+  emptyBox.style.display=payments.length===0?"block":"none";
+}
+
+function switchTab(type,event){
+  currentSearchType=type;
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  event.target.classList.add("active");
+
+  if(type==="payment"){
+    searchLabel.innerHTML="<b>Payment ID</b>";
+    searchInput.placeholder="Enter Payment ID";
+  }else{
+    searchLabel.innerHTML="<b>Customer ID</b>";
+    searchInput.placeholder="Enter Customer ID";
+  }
+}
+
+function searchPayment(){
+  const value=searchInput.value;
+  let results;
+  if(currentSearchType==="payment"){
+    results=payments.filter(p=>p.id===value);
+  }else{
+    results=payments.filter(p=>p.customer===value);
+  }
+
+  if(results.length>0){
+    result.style.display="block";
+    result.innerHTML=results.map(p=>`
+      <b>ID:</b> ${p.id}<br>
+      <b>Amount:</b> ${p.amount} ${p.currency}<br>
+      <b>Customer:</b> ${p.customer}<br>
+      <b>Status:</b> ${p.status}<br><br>
+    `).join("");
+  }else{
+    result.style.display="block";
+    result.innerHTML="No matching payment found.";
+  }
+}
+
+function toggleAutoRefresh(cb){
+  if(cb.checked){
+    refreshInterval=setInterval(searchPayment,3000);
+  }else{
+    clearInterval(refreshInterval);
+  }
+}
+</script>
+
+</body>
+</html>
