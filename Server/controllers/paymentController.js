@@ -176,7 +176,7 @@ router.get("/summary", async (req, res) => {
 router.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        console.log("Looking for payment with ID: ${id}");
+        console.log(`🔍 Looking for payment with ID: ${id}`);
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({
@@ -208,7 +208,7 @@ router.get("/:id", async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error:", error);
+        console.error("🔥 Error:", error);
         res.status(500).json({
             success: false,
             message: "Server error while fetching payment",
